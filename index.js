@@ -30,23 +30,30 @@ async function run() {
     await client.connect();
 
     const businessesCollection = client.db("bdHandicraftsDb").collection("businesses");
+    const productsCollection = client.db("bdHandicraftsDb").collection("products");
 
+    // business related api
     app.get('/businesses', async (req, res) => {
-        const result = await businessesCollection.find().toArray();
-        res.send(result);
+      const result = await businessesCollection.find().toArray();
+      res.send(result);
     });
     app.get('/businesses/:id', async (req, res) => {
-        try {
-            const id = req.params.id;
-            const query = { _id: new ObjectId(id) };
-            const result = await businessesCollection.findOne(query);
-            res.send(result)
-          }
-          catch (error) {
-            console.log(error)
-          }
+      try {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id) };
+        const result = await businessesCollection.findOne(query);
+        res.send(result)
+      }
+      catch (error) {
+        console.log(error)
+      }
     });
 
+    // products related api
+    app.get('/products', async (req, res) => {
+      const result = await productsCollection.find().toArray();
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -61,9 +68,9 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send('server is running')
+  res.send('server is running')
 })
 
-app.listen(port,()=>{
-    console.log(`Server is running on ${port}`);
+app.listen(port, () => {
+  console.log(`Server is running on ${port}`);
 })
